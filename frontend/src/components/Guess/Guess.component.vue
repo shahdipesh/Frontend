@@ -21,7 +21,7 @@ onMounted(() => {
         isImposter.value = true
     })
 
-    socket.on('WORD', ({wordToGuess}) => {
+    socket.on('WORD', ({ wordToGuess }) => {
         word.value = wordToGuess
     })
 
@@ -29,30 +29,29 @@ onMounted(() => {
         isTurnToGuess.value = true
     })
 
-    socket.on('ROUND_OVER',()=>{
+    socket.on('ROUND_OVER', () => {
         alert("ROUND OVER")
     })
 })
 
-let guess = async()=>{
-    axios.post(`${backendUrl}/game/guess`,{
+let guess = async () => {
+    axios.post(`${backendUrl}/game/guess`, {
         gameId: localStorage.getItem('gameId'),
-        userId:localStorage.getItem('userId')
-    }).then(res=>{
-        if (res.status==200){
-            isTurnToGuess.value = false; 
+        userId: localStorage.getItem('userId')
+    }).then(res => {
+        if (res.status == 200) {
+            isTurnToGuess.value = false;
         }
-    })
-    .catch(e=>{
-        alert(e)
-    })
+    }).catch(e => {
+            alert(e)
+        })
 }
 
 </script>
 
 <template>
     <h1 class="container flex flex-column gap-3">
-        {{ isImposter ? "You are the imposter" : `Your word is: ${word}`  }}
-        <Button v-if="isTurnToGuess" label="Guess" @click="guess"/>
+        {{ isImposter ? "You are the imposter" : `Your word is: ${word}` }}
+        <Button v-if="isTurnToGuess" label="Guess" @click="guess" />
     </h1>
 </template>
