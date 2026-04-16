@@ -8,11 +8,11 @@ import './CreateRoomComponent.css'
 
 const router = useRouter()
 
-const roomName = ref('')
+const roomName = ref('viva')
 const isLoading = ref(false)
 const errorMessage = ref('')
 const createdRoomCode = ref('')
-const numPlayers=ref(3);
+const numPlayers=ref(2);
 const backendUrl = import.meta.env.VITE_BACKEND_URL
 
 import getOrCreateUserId from '@/utils/userUtils'
@@ -32,6 +32,8 @@ async function createRoom() {
     const response = await axios.post(`${backendUrl}/createRoom`, { userId, gameId: name, numPlayers:numPlayers.value })
     if (response.data.status=='200'){
       goToJoinRoom(name)
+    }else{
+      errorMessage.value = response.data.msg
     }
   } catch (err) {
     errorMessage.value = 'Failed to create room. Please try again.'

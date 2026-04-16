@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import Button from 'primevue/button'
 import InputText from 'primevue/inputtext'
@@ -12,17 +12,22 @@ const backendUrl = import.meta.env.VITE_BACKEND_URL
 
 const joinRoom = (model) => {
   localStorage.setItem('gameId', model);
+  const userId = getOrCreateUserId()
+  localStorage.setItem('userId', userId)
   axios.post(`${backendUrl}/joinRoom`, {
     gameId: model,
-    userId: getOrCreateUserId()
+    userId
   }).then(res => {
-    if (res.status == 200) {
+    if (res.data.msg != "Already full") {
       router.push({ name: 'game' })
+    }else{
+      alert("ALREADY FULL")
     }
   }).catch(err => {
     console.log(err)
   })
 }
+
 </script>
 
 <template>

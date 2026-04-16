@@ -4,7 +4,7 @@ import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
-const roomName = ref(route.query.roomName || '')
+const roomName = ref(route.query.roomName || 'viva')
 </script>
 
 <template>
