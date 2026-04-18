@@ -9,6 +9,7 @@ const router = useRouter()
 
 let isImposter = ref(false)
 let word = ref('')
+let hintForImposter = ref('')
 let isTurnToGuess = ref(false);
 let isGameOver = ref(false)
 let msg = ref('')
@@ -31,12 +32,13 @@ onMounted(() => {
         }
     })
 
-    socket.on('IMPOSTER', () => {
+    socket.on('IMPOSTER', ({hint}) => {
         isImposter.value = true
+        hintForImposter.value = hint
     })
 
     socket.on('WORD', ({ wordToGuess }) => {
-        word.value = wordToGuess
+        word.value = wordToGuess.word
     })
 
     socket.on('YOUR_TURN', () => {
@@ -88,15 +90,14 @@ let playAgain = async () => {
 </script>
 
 <template>
-    {{ isImposter }}
-    {{ userId }}
     <h1 class="container flex flex-column gap-3">
         <span class="container flex flex-column gap-3" v-if="isGameOver">
             {{ msg }}
             <Button v-if="isGameOver && isOwner" label="Play Again" @click="playAgain" />
         </span>
         <span class="container flex flex-column gap-3" v-else>
-            {{ isImposter ? "You are the imposter" : `Your word is: ${word}` }}
+            {{ isImposter ? `You are the imposter.` : `Your word is: ${word}` }}
+            <br><i>{{ isImposter ? `Hint: ${hintForImposter}`: '' }}</i>
             <Button v-if="isTurnToGuess" label="Guess" @click="guess" />
         </span>
     </h1>
