@@ -43,6 +43,10 @@ onMounted(() => {
         isTurnToGuess.value = true
     })
 
+    socket.on('DISCONNECT',()=>{
+        router.push('/join-room')
+    })
+
     socket.on('ROUND_OVER', () => {
         msg.value = 'GAME OVER!. GUESS WHO IS THE IMPOSTER'
         isGameOver.value = true
