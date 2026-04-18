@@ -54,7 +54,7 @@ function goToJoinRoom(name) {
     <h1>Create Room</h1>
 
     <InputText v-model="roomName" placeholder="Room Name" />
-    <InputText v-model="numPlayers" placeholder="Number of Players" />
+    <InputText type="number" v-model="numPlayers" placeholder="Number of Players" />
 
     <div class="flex gap-2">
       <Button label="Create" :disabled="!canSubmit" :loading="isLoading" @click="createRoom" />
