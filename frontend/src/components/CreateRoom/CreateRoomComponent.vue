@@ -8,11 +8,11 @@ import './CreateRoomComponent.css'
 
 const router = useRouter()
 
-const roomName = ref('viva')
+const roomName = ref('')
 const isLoading = ref(false)
 const errorMessage = ref('')
 const createdRoomCode = ref('')
-const numPlayers=ref(2);
+const numPlayers=ref();
 const backendUrl = import.meta.env.VITE_BACKEND_URL
 
 import getOrCreateUserId from '@/utils/userUtils'
