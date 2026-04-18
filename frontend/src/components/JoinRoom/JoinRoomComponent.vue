@@ -13,7 +13,6 @@ const backendUrl = import.meta.env.VITE_BACKEND_URL
 const joinRoom = (model) => {
   localStorage.setItem('gameId', model);
   const userId = getOrCreateUserId()
-  localStorage.setItem('userId', userId)
   axios.post(`${backendUrl}/joinRoom`, {
     gameId: model,
     userId

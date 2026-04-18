@@ -2,6 +2,8 @@
 import Button from 'primevue/button'
 import './HomeComponent.css'
 import { useRouter } from 'vue-router'
+import { onMounted } from 'vue'
+import getOrCreateUserId from '@/utils/userUtils'
 const router = useRouter()
 
 let joinRoom = () => {
@@ -11,6 +13,11 @@ let joinRoom = () => {
 let createRoom = () => {
     router.push('/create-room')
 }
+
+onMounted(()=>{
+    const userId = getOrCreateUserId()
+  localStorage.setItem('userId', userId)
+})
 </script>
 
 <template>

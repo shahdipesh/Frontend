@@ -30,7 +30,7 @@ async function createRoom() {
   isLoading.value = true
   try {
     const response = await axios.post(`${backendUrl}/createRoom`, { userId, gameId: name, numPlayers:numPlayers.value })
-    if (response.data.status=='200'){
+    if (response.status=='200'){
       goToJoinRoom(name)
     }else{
       errorMessage.value = response.data.msg

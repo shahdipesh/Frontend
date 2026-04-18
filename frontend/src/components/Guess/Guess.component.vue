@@ -13,6 +13,7 @@ let isTurnToGuess = ref(false);
 let isGameOver = ref(false)
 let msg = ref('')
 let isOwner = ref(false)
+let userId=ref('NULL')
 const backendUrl = import.meta.env.VITE_BACKEND_URL
 
 onMounted(() => {
@@ -84,6 +85,7 @@ let playAgain = async () => {
 
 <template>
     {{ isImposter }}
+    {{ userId }}
     <h1 class="container flex flex-column gap-3">
         <span class="container flex flex-column gap-3" v-if="isGameOver">
             {{ msg }}
