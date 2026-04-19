@@ -12,7 +12,7 @@ const roomName = ref('')
 const isLoading = ref(false)
 const errorMessage = ref('')
 const createdRoomCode = ref('')
-const numPlayers=ref();
+const numPlayers = ref();
 const backendUrl = import.meta.env.VITE_BACKEND_URL
 
 import getOrCreateUserId from '@/utils/userUtils'
@@ -29,10 +29,23 @@ async function createRoom() {
 
   isLoading.value = true
   try {
-    const response = await axios.post(`${backendUrl}/createRoom`, { userId, gameId: name, numPlayers:numPlayers.value })
-    if (response.status=='200'){
-      goToJoinRoom(name)
-    }else{
+    const response = await axios.post(`${backendUrl}/createRoom`, { userId, gameId: name, numPlayers: numPlayers.value })
+    if (response.status == '200') {
+      localStorage.setItem('gameId', name);
+      const userId = getOrCreateUserId()
+      axios.post(`${backendUrl}/joinRoom`, {
+        gameId: name,
+        userId
+      }).then(res => {
+        if (res.data.msg != "Already full") {
+          router.push({ name: 'game' })
+        } else {
+          alert("ALREADY FULL")
+        }
+      }).catch(err => {
+        console.log(err)
+      })
+    } else {
       errorMessage.value = response.data.msg
     }
   } catch (err) {
