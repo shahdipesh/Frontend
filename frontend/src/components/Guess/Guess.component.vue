@@ -14,7 +14,7 @@ let isTurnToGuess = ref(false);
 let isGameOver = ref(false)
 let msg = ref('')
 let isOwner = ref(false)
-let userId=ref('NULL')
+let userId = ref('NULL')
 const backendUrl = import.meta.env.VITE_BACKEND_URL
 
 onMounted(() => {
@@ -24,15 +24,15 @@ onMounted(() => {
         socket.emit('JOIN_GAME', { gameId, userId })
     }
 
-    axios.get(`${backendUrl}/isOwner`,{
-        params: { userId, gameId}
-    }).then(res=>{
-        if(res.data.isOwner){
+    axios.get(`${backendUrl}/isOwner`, {
+        params: { userId, gameId }
+    }).then(res => {
+        if (res.data.isOwner) {
             isOwner.value = true
         }
     })
 
-    socket.on('IMPOSTER', ({hint}) => {
+    socket.on('IMPOSTER', ({ hint }) => {
         isImposter.value = true
         hintForImposter.value = hint
     })
@@ -45,12 +45,12 @@ onMounted(() => {
         isTurnToGuess.value = true
     })
 
-    socket.on('DISCONNECT',()=>{
+    socket.on('DISCONNECT', () => {
         router.push('/join-room')
     })
 
     socket.on('ROUND_OVER', () => {
-        msg.value = 'GAME OVER!. GUESS WHO IS THE IMPOSTER'
+        msg.value = 'Roud over!. Guess the imposter'
         isGameOver.value = true
     })
 
@@ -95,9 +95,21 @@ let playAgain = async () => {
             {{ msg }}
             <Button v-if="isGameOver && isOwner" label="Play Again" @click="playAgain" />
         </span>
-        <span class="container flex flex-column gap-3" v-else>
+        <span class="container flex flex-column gap-3" :style="isTurnToGuess ? {
+            border: '2px solid #00ffd0',
+            boxShadow: '0 0 20px rgba(0,255,200,0.8)',
+            background: 'rgba(0,255,200,0.08)',
+            borderRadius: '12px',
+            padding: '10px',
+            transition: 'all 0.3s ease'
+        } : {}" v-else>
+            <div v-if="isTurnToGuess" style="font-size: 0.9rem; color: #00ffd0; font-weight: 600;">
+                🔥 YOUR TURN
+            </div>
             {{ isImposter ? `You are the imposter.` : `Your word is: ${word}` }}
-            <br><i>{{ isImposter ? `Hint: ${hintForImposter}`: '' }}</i>
+            <br><i style="font-size: 0.8rem; opacity: 0.7;">
+                {{ isImposter ? `Hint: ${hintForImposter}` : '' }}
+            </i>
             <Button v-if="isTurnToGuess" label="Guess" @click="guess" />
         </span>
     </h1>
