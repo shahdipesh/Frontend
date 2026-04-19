@@ -7,15 +7,18 @@ import './JoinRoomComponent.css'
 import axios from 'axios'
 import getOrCreateUserId from '@/utils/userUtils'
 const router = useRouter()
-const model = defineModel()
+const roomName = defineModel('roomName')
+const playerName = defineModel('playerName')
 const backendUrl = import.meta.env.VITE_BACKEND_URL
 
-const joinRoom = (model) => {
-  localStorage.setItem('gameId', model);
+const joinRoom = (playerName,roomName) => {
+  localStorage.setItem('gameId', roomName);
+  localStorage.setItem('playerName', playerName);
   const userId = getOrCreateUserId()
   axios.post(`${backendUrl}/joinRoom`, {
-    gameId: model,
-    userId
+    gameId: roomName,
+    userId,
+    playerName
   }).then(res => {
     if (res.data.msg != "Already full") {
       router.push({ name: 'game' })
@@ -32,8 +35,9 @@ const joinRoom = (model) => {
 <template>
   <div class="container flex flex-column gap-3">
     <h1>Join Room</h1>
-    <InputText v-model="model" placeholder="Room Name" />
-    <Button label="Join" @click="joinRoom(model)" />
+    <InputText required v-model="playerName" placeholder="Your name" />
+    <InputText required v-model="roomName" placeholder="Room Name" />
+    <Button label="Join" @click="joinRoom(playerName,roomName)" />
     <Button label="Back" severity="secondary" @click="router.push('/')" />
   </div>
 </template>

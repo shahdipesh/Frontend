@@ -4,16 +4,21 @@ import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
-const roomName = ref(route.query.roomName)
+let roomName = ref(route.query.roomName)
+let playerName = ref('')
 
-onMounted(()=>{
+onMounted(() => {
   let room = localStorage.getItem('gameId')
-  if(room){
+  let player = localStorage.getItem('playerName')
+  if (room) {
     roomName.value = room
+  }
+  if (playerName) {
+    playerName.value = player
   }
 })
 </script>
 
 <template>
-  <JoinRoomComponent v-model="roomName"/>
+  <JoinRoomComponent v-model:roomName="roomName" v-model:playerName="playerName" />
 </template>

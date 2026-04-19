@@ -15,6 +15,7 @@ let isGameOver = ref(false)
 let msg = ref('')
 let isOwner = ref(false)
 let userId = ref('NULL')
+let whoseTurn = ref('')
 const backendUrl = import.meta.env.VITE_BACKEND_URL
 
 onMounted(() => {
@@ -30,6 +31,10 @@ onMounted(() => {
         if (res.data.isOwner) {
             isOwner.value = true
         }
+    })
+
+    socket.on('PLAYER_TURN', ({ playerTurnName }) => {
+        whoseTurn.value = playerTurnName
     })
 
     socket.on('IMPOSTER', ({ hint }) => {
@@ -105,6 +110,9 @@ let playAgain = async () => {
         } : {}" v-else>
             <div v-if="isTurnToGuess" style="font-size: 0.9rem; color: #00ffd0; font-weight: 600;">
                 🔥 YOUR TURN
+            </div>
+            <div v-else style="font-size: 0.9rem; color: #00ffd0; font-weight: 600;">
+                {{ `${whoseTurn}'s turn to Give Hint` }}
             </div>
             {{ isImposter ? `You are the imposter.` : `Your word is: ${word}` }}
             <br><i style="font-size: 0.8rem; opacity: 0.7;">
