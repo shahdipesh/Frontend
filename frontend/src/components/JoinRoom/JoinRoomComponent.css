@@ -107,5 +107,7 @@ body {
     .container {
       margin: 60px 16px;
       padding: 20px;
+      width: 90%;
+      height: 80vh;
     }
   }

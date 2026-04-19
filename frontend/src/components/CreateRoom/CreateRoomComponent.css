@@ -37,7 +37,8 @@ body::before {
 
 /* Card / form container */
 .create-room-page {
-  max-width: 420px;
+  width: 90%;
+  height: 80vh;
   margin: 100px auto;
   padding: 32px;
   border-radius: 16px;
