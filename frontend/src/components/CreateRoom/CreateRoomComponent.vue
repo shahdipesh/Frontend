@@ -79,8 +79,6 @@ onMounted(() => {
 <template>
   <div class="create-room-page container flex flex-column gap-3">
     <h1>Create Room</h1>
-    {{ playerName }}
-
     <InputText v-model="playerName" placeholder="Your Name" />
     <InputText v-model="roomName" placeholder="Room Name" />
     <InputText type="number" v-model="numPlayers" placeholder="Number of Players" />
