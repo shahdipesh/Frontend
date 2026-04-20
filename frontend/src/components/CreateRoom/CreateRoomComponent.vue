@@ -21,12 +21,16 @@ import getOrCreateUserId from '@/utils/userUtils'
 const canSubmit = computed(() => roomName.value.trim().length > 0 && !isLoading.value)
 
 async function createRoom() {
-
   errorMessage.value = ''
   createdRoomCode.value = ''
 
   const name = roomName.value.trim()
   const userId = getOrCreateUserId()
+
+  if (!roomName.value || !playerName.value || !numPlayers.value) {
+    errorMessage.value = 'Please fill all the fields'
+    return
+  }
 
   isLoading.value = true
   try {
@@ -38,7 +42,7 @@ async function createRoom() {
       axios.post(`${backendUrl}/joinRoom`, {
         gameId: name,
         userId,
-        playerName:response.data.playerName
+        playerName: response.data.playerName
       }).then(res => {
         if (res.data.msg != "Already full") {
           router.push({ name: 'game' })
@@ -61,12 +65,12 @@ async function createRoom() {
 }
 
 function goToJoinRoom(name) {
-  router.push({ name: 'join-room', query: { roomName: name, playerName:playerName } })
+  router.push({ name: 'join-room', query: { roomName: name, playerName: playerName } })
 }
 
-onMounted(()=>{
+onMounted(() => {
   let pName = localStorage.getItem('playerName')
-  if(pName){
+  if (pName) {
     playerName.value = pName
   }
 })
