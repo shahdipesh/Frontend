@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, onUnmounted, ref } from "vue";
 import { io } from "socket.io-client";
 import Button from 'primevue/button'
 import axios from "axios";
@@ -18,6 +18,8 @@ let userId = ref('NULL')
 let whoseTurn = ref('')
 const backendUrl = import.meta.env.VITE_BACKEND_URL
 
+let handleVisibility = null;
+
 onMounted(() => {
     const gameId = localStorage.getItem('gameId')
     const userId = localStorage.getItem('userId')
@@ -32,6 +34,26 @@ onMounted(() => {
             isOwner.value = true
         }
     })
+
+    axios.post(`${backendUrl}/game/whoseTurn`, {
+        gameId: localStorage.getItem('gameId'),
+        userId: localStorage.getItem('userId')
+    }).then(res => {
+        let name = res.data.name;
+        let id = res.data.name;
+        whoseTurn.value = name
+        if (id === localStorage.getItem('userId')) {
+            isTurnToGuess.value = true
+        }
+    })
+
+    handleVisibility = () => {
+        if (!document.hidden) {
+            router.push('/start-game');
+        }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibility);
 
     socket.on('PLAYER_TURN', ({ playerTurnName }) => {
         whoseTurn.value = playerTurnName
@@ -63,6 +85,10 @@ onMounted(() => {
         router.push('/join-room')
     })
 })
+
+onUnmounted(() => {
+    document.removeEventListener("visibilitychange", handleVisibility);
+});
 
 let guess = async () => {
     axios.post(`${backendUrl}/game/guess`, {
