@@ -40,7 +40,7 @@ onMounted(() => {
         userId: localStorage.getItem('userId')
     }).then(res => {
         let name = res.data.name;
-        let id = res.data.name;
+        let id = res.data.userId;
         whoseTurn.value = name
         if (id === localStorage.getItem('userId')) {
             isTurnToGuess.value = true
