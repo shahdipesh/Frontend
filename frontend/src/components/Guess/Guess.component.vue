@@ -174,9 +174,10 @@ let submitImposterGuess = (imposterId) => {
 </script>
 
 <template>
-    <h1 class="container flex flex-column gap-3">
+    <div class="guess-page">
+        <div class="guess-content flex flex-column gap-3">
         <LeaderBoard :players="players"></LeaderBoard>
-        <span class="container flex flex-column gap-3" v-if="isVotingStarted">
+        <span class="guess-card flex flex-column gap-3" v-if="isVotingStarted">
             {{ msg }}
             <div style="font-size: 20px;" v-if="isVotingStarted">
                 Vote For Imposter:
@@ -185,7 +186,7 @@ let submitImposterGuess = (imposterId) => {
                 :key="index" :label="p.playerName || 'Player'" @click="submitImposterGuess(p.userId)" />
         </span>
         <Button v-if="isVotingEnded && isOwner" label="Play Again" @click="playAgain" />
-        <span class="container flex flex-column gap-3" :style="isTurnToGuess ? {
+        <span class="guess-card flex flex-column gap-3" :style="isTurnToGuess ? {
             border: '2px solid #00ffd0',
             boxShadow: '0 0 20px rgba(0,255,200,0.8)',
             background: 'rgba(0,255,200,0.08)',
@@ -193,7 +194,7 @@ let submitImposterGuess = (imposterId) => {
             padding: '10px',
             transition: 'all 0.3s ease'
         } : {}" v-else>
-            <div v-if="!isVotingStarted"">
+            <div v-if="!isVotingStarted">
                 <div v-if="isTurnToGuess" style="font-size: 0.9rem; color: #00ffd0; font-weight: 600;">
                 🔥 YOUR TURN
             </div>
@@ -207,5 +208,33 @@ let submitImposterGuess = (imposterId) => {
             <Button v-if="isTurnToGuess" label="Guess" @click="guess" />
             </div>
         </span>
-    </h1>
+        </div>
+    </div>
 </template>
+
+<style scoped>
+.guess-page {
+    min-height: 100vh;
+    padding: 16px;
+}
+
+.guess-content {
+    max-width: 760px;
+    margin: 0 auto;
+}
+
+.guess-card {
+    width: 100%;
+    overflow-wrap: anywhere;
+}
+
+@media (max-width: 768px) {
+    .guess-page {
+        padding: 12px;
+    }
+
+    .guess-content :deep(.p-button) {
+        width: 100%;
+    }
+}
+</style>

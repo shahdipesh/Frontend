@@ -22,3 +22,16 @@
     overflow-y: auto;
     font-size: 14px;
   }
+
+  @media (max-width: 1024px) {
+    .leaderboard-wrapper {
+      position: static;
+      width: 100%;
+      max-width: 100%;
+      margin-bottom: 12px;
+    }
+
+    .leaderBoardContainer {
+      max-height: 120px;
+    }
+  }
