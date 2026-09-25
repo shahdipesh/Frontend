@@ -6,6 +6,9 @@ import axios from "axios";
 import socket from '../../router/socket'
 import { useRouter } from 'vue-router'
 import LeaderBoard from "../LeaderBoard/LeaderBoard.vue";
+
+import InputText from 'primevue/inputtext';
+
 const router = useRouter()
 
 let isImposter = ref(false)
@@ -25,6 +28,8 @@ let hasAlreadyVoted = ref(false)
 const backendUrl = import.meta.env.VITE_BACKEND_URL
 
 let handleVisibility = null;
+
+const guessedWord = ref('')
 
 onMounted(() => {
     const gameId = localStorage.getItem('gameId')
@@ -157,7 +162,8 @@ let submitImposterGuess = (imposterId) => {
     axios.post(`${backendUrl}/game/guessImposter`, {
         gameId: localStorage.getItem('gameId'),
         userId: localStorage.getItem('userId'),
-        guessedImposterId: imposterId
+        guessedImposterId: imposterId,
+        guessedWord: guessedWord.value
     }).then(res => {
         if (res.data.msg === localStorage.getItem('userId')) {
             filteredPlayers.value = filteredPlayers.value.filter(p => {
@@ -182,8 +188,13 @@ let submitImposterGuess = (imposterId) => {
             <div style="font-size: 20px;" v-if="isVotingStarted">
                 Vote For Imposter:
             </div>
-            <Button v-if="!guessed && !isVotingEnded && !hasAlreadyVoted" v-for="(p, index) in filteredPlayers"
+            <Button v-if="!guessed && !isVotingEnded && !hasAlreadyVoted && !isImposter" v-for="(p, index) in filteredPlayers"
                 :key="index" :label="p.playerName || 'Player'" @click="submitImposterGuess(p.userId)" />
+            <!-- if its imposter show input box to type guessed word -->
+            <div class="flex flex-column gap-3" v-if="isImposter && !guessed && !isVotingEnded && !hasAlreadyVoted">
+                <InputText type="text" v-model="guessedWord" placeholder="Type your guess here..." />
+                <Button label="Submit Guess" @click="submitImposterGuess('randomGuess')" />
+            </div>
         </span>
         <Button v-if="isVotingEnded && isOwner" label="Play Again" @click="playAgain" />
         <span class="guess-card flex flex-column gap-3" :style="isTurnToGuess ? {
